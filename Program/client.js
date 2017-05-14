@@ -5,7 +5,7 @@
  */
 
 import firebase from 'firebase';
-import publicFirebaseConfig from './publicFirebaseConfig.js';
+import publicFirebaseConfig from './config/publicFirebaseConfig.js';
 
 // Webpack: Import cool custom font
 import './css/rubik/stylesheet.css';
@@ -14,7 +14,7 @@ import './css/rubik/stylesheet.css';
 import './sass/index.scss';
 
 // Load index.html
-require('file?name=[name].[ext]!./index.html');
+require('file?name=[name].[ext]!./html/index.html');
 
 /**
  * @class SocketVariable

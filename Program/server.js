@@ -10,7 +10,7 @@
     var hardware = process.argv.length == 3 && process.argv[2] == 'virtual' ? new VirtualHardware() : new ArduinoHardware();
 
     admin.initializeApp({
-        credential: admin.credential.cert(require("./serviceAccountKey.json")),
+        credential: admin.credential.cert(require("./config/serviceAccountKey.json")),
         databaseURL: "https://fit3140-team29-a2-c8d2a.firebaseio.com"
     });
 
