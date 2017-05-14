@@ -3,8 +3,9 @@ module.exports = (function(){
     const EventEmitter = require('events');
     
     return class extends EventEmitter {
-        constructor(hardware, dashTime) {
+        constructor(hardware, dashTime, dateMock) {
             super();
+            
             var me = this;
             me.motionStartTime = 0;
             hardware.on("motionstart", function() {
