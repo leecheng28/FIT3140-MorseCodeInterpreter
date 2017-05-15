@@ -1,12 +1,19 @@
 /**
- * FIT3140 - Assignment 1. Team 29. Matthew Ready and Xavier Taylor.
+ * FIT3140 - Assignment 5. Team 29. Matthew Ready and Xavier Taylor.
+ *
+ * webpack.config.js - Webpack takes modules with dependencies and generate static assets representing 
+ * those modules. 
+ *
  */
+
+// Import libraries
 var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const isDevServer = process.argv.find(v => v.indexOf('webpack-dev-server') !== -1);
 
+// Definition of any plugins.
 var plugins = []
 
 if (!isDevServer) {
@@ -15,9 +22,11 @@ if (!isDevServer) {
 }
 
 module.exports = {
+  // Here the application starts executing, webpack starts building
   entry: {
     client: './client.js'
   },
+  // how webpack emits the results
   output: {
     path: './public',
     publicPath: '/',
@@ -28,6 +37,7 @@ module.exports = {
     inline: true,
     port: 3333
   },
+  // configuration regarding modules
   module: {
     loaders: [
       {
