@@ -1,5 +1,9 @@
 /**
- * FIT3140 - Assignment 1. Team 29. Matthew Ready and Xavier Taylor.
+ * FIT3140 - Assignment 5. Team 29. 
+ *
+ * webpack.config.js: Defines how webpack concatenates files.
+ *
+ * @author Matthew Ready, Li Cheng
  */
 var path = require('path');
 var webpack = require('webpack');

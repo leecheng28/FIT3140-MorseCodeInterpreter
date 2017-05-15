@@ -1,12 +1,11 @@
 /**
  * FIT3140 - Assignment 5. Team 29. 
  *
- * index.js: Client-side program receives motion sensor message(long/short), decodes
- * the messages into English letters, and print the decoded messages. 
+ * index.js: Client-side program prints the decoded messages and shows the
+ *           dots and dashes in the letter currently being received.
  *
- * @author Matthew Ready, Xavier Taylor, Li Cheng
+ * @author Matthew Ready, Li Cheng
  */
-
 import firebase from 'firebase';
 import publicFirebaseConfig from './config/publicFirebaseConfig.js';
 
@@ -182,8 +181,8 @@ class ValueBox {
 window.onload = () => {
     let socket = new Socket(publicFirebaseConfig);
 
-    // Create new objects to deal with each of the variables. We don't need
-    // to keep a reference around for anything.
+    // Create new objects to show each of the two important variables to the
+    // user (the current message and the current letter)
     new ValueBox(socket.getVariable("morse/message", ""), "message");
     new ValueBox(socket.getVariable("morse/currentLetter", ""), "current-letter");
 };

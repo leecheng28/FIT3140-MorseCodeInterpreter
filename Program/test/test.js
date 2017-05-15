@@ -1,3 +1,11 @@
+/**
+ * FIT3140 - Assignment 5. Team 29. 
+ *
+ * test.js: Uses the mocha framework to test some of the assignment user 
+ *          stories
+ *
+ * @author Matthew Ready, Li Cheng
+ */
 const assert = require('assert');
 const ShortLongInterpreter = require('../lib/short-long-interpreter.js');
 const EventEmitter = require('events');
@@ -11,7 +19,7 @@ describe('ShortLongInterpreter', function() {
         [
             // Events [<type of event>, <time of occurance>]
             [["start", 0], ["end", 400]],
-            // Expected results [<is a long event>, <time of signal start>]
+            // Expected signals [<is a long event>, <time of signal start>]
             [[true, 0]]
         ],
         [
@@ -51,11 +59,11 @@ describe('ShortLongInterpreter', function() {
     // Run through each test.
     tests.forEach(function(test) {
         const EVENTS = test[0];
-        const EXPECTED_LONG_SHORTS = test[1];
+        const EXPECTED_SIGNALS = test[1];
         
         // Make a nice test name string to display to the test runner.
         var eventString = EVENTS.map((x) => x[0] + " at " + x[1]).join(", ");
-        var resultString = EXPECTED_LONG_SHORTS.map((x) => (x[0] ? "long" : "short") + " at " + x[1]).join(", ");
+        var resultString = EXPECTED_SIGNALS.map((x) => (x[0] ? "long" : "short") + " at " + x[1]).join(", ");
         
         // Start the test
         it('should signal "' + resultString + '" for events "' + eventString + '" (long is 300 units)', function() {
@@ -70,14 +78,18 @@ describe('ShortLongInterpreter', function() {
                 var result = [];
                 var mockHardware = new EventEmitter();
                 var shortLong = new ShortLongInterpreter(mockHardware, 300);
+                
+                // Append signals to the result array.
                 shortLong.on('signal', (isLong, startTime) => result.push([isLong, startTime.getTime()]));
                 
+                // Run every event.
                 EVENTS.forEach((x) => {
                     now = new OriginalDate(x[1]);
                     mockHardware.emit("motion" + x[0]);
                 });
                 
-                assert.deepEqual(EXPECTED_LONG_SHORTS, result);
+                // Make sure the signals are correct.
+                assert.deepEqual(EXPECTED_SIGNALS, result);
             } finally {
                 Date = OriginalDate;
             }
