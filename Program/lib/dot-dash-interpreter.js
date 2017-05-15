@@ -12,19 +12,22 @@ module.exports = (function(){
     const EventEmitter = require('events');
     
     return class extends EventEmitter {
-        constructor(hardware, dashTime, dateMock) {
+        constructor(hardware, dashTime) {
             super();
             
             var me = this;
-            me.motionStartTime = 0;
+            me.motionStartTime = null;
             hardware.on("motionstart", function() {
-	            me.motionStartTime = Date.now();
+                if (me.motionStartTime === null) {
+    	            me.motionStartTime = Date.now();
+	            }
             });
             hardware.on("motionend", function() {
-                if (me.motionStartTime > 0) {
+                if (me.motionStartTime !== null) {
                     var now = Date.now();
                     var motionLength = now - me.motionStartTime;
-                    me.emit('signal', motionLength > dashTime, me.motionStartTime);
+                    me.emit('signal', motionLength >= dashTime, me.motionStartTime);
+                    me.motionStartTime = null;
                 }
             });
         }
