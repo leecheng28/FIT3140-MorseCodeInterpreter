@@ -1,7 +1,7 @@
 /**
  * FIT3140 - Assignment 5. Team 29. 
  *
- * arduino-hardware.js: 
+ * arduino-hardware.js: a class provides behaviors for arduino hardware device.
  * 
  *
  * @author Matthew Ready, Li Cheng
@@ -43,7 +43,7 @@ module.exports = (function(){
         }
     }
 
-    // 
+    // Set arduino device 
     ArduinoHardware.prototype.on = function(eventName, callback) {
         if (this.motion !== null) {
             this.motion.on(eventName, callback);

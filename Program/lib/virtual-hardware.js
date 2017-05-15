@@ -1,7 +1,8 @@
 /**
  * FIT3140 - Assignment 5. Team 29. 
  *
- * virtual-hardware.js: self-made arduino hardware.
+ * virtual-hardware.js: Self-made virtual arduino hardware. Provide behaviors for
+ * a arduio hardware device.
  * 
  *
  * @author Matthew Ready, Li Cheng
@@ -21,7 +22,8 @@ module.exports = (function(){
         var me = this;
         me.motionState = false;
         me.events = new EventEmitter();
-        
+
+        // switch motion state between on and off 
         function toggleState() {
             me.motionState = !me.motionState;
             me.events.emit("motion" + (me.motionState ? "start" : "end"));
