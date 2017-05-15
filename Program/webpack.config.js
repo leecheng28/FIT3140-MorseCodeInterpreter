@@ -16,7 +16,7 @@ if (!isDevServer) {
 
 module.exports = {
   entry: {
-    index: './index.js'
+    client: './client.js'
   },
   output: {
     path: './public',
