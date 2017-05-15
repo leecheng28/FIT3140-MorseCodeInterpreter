@@ -1,3 +1,12 @@
+/**
+ * FIT3140 - Assignment 5. Team 29. 
+ *
+ * arduino-hardware.js: 
+ * 
+ *
+ * @author Matthew Ready, Li Cheng
+ */
+
 module.exports = (function(){
     "use strict";
     var five = require("johnny-five");
@@ -9,7 +18,7 @@ module.exports = (function(){
         me.led = null;
         me.ledState = false;
         
-        // Create a Johnny-five board object to use to communicate with the arduino
+        // Create a Johnny-five board object to communicate with the arduino device
         var board = new five.Board();
         board.on("ready", function() {
 	        me.led = new five.Led(13);
@@ -26,6 +35,7 @@ module.exports = (function(){
         });
     }
 
+    // Set arduino LED state 
     ArduinoHardware.prototype.setLed = function(ledIsOn) {
         this.ledState = ledIsOn;
         if (this.led !== null) {
@@ -33,6 +43,7 @@ module.exports = (function(){
         }
     }
 
+    // 
     ArduinoHardware.prototype.on = function(eventName, callback) {
         if (this.motion !== null) {
             this.motion.on(eventName, callback);

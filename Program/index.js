@@ -1,7 +1,10 @@
 /**
- * FIT3140 - Assignment 1. Team 29. Matthew Ready and Xavier Taylor.
+ * FIT3140 - Assignment 5. Team 29. 
  *
- * index.js: Provides the client side behaviour. 
+ * index.js: Client-side program receives motion sensor message(long/short), decodes
+ * the messages into English letters, and print the decoded messages. 
+ *
+ * @author Matthew Ready, Xavier Taylor, Li Cheng
  */
 
 import firebase from 'firebase';

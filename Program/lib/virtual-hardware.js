@@ -1,3 +1,12 @@
+/**
+ * FIT3140 - Assignment 5. Team 29. 
+ *
+ * virtual-hardware.js: self-made arduino hardware.
+ * 
+ *
+ * @author Matthew Ready, Li Cheng
+ */
+
 module.exports = (function(){
     "use strict";
     const readline = require('readline');

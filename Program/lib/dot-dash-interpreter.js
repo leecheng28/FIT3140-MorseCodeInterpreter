@@ -1,3 +1,12 @@
+/**
+ * FIT3140 - Assignment 5. Team 29. 
+ *
+ * dot-dash-interpreter.js: Dot-dash interpreter program
+ * 
+ *
+ * @author Matthew Ready, Li Cheng
+ */
+
 module.exports = (function(){
     "use strict";
     const EventEmitter = require('events');
