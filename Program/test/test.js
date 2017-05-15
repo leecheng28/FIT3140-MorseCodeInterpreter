@@ -1,17 +1,17 @@
 const assert = require('assert');
-const DotDashInterpreter = require('../lib/dot-dash-interpreter.js');
+const ShortLongInterpreter = require('../lib/short-long-interpreter.js');
 const EventEmitter = require('events');
 
-describe('DotDashInterpreter', function() {
-    // The following array defines several test cases for the dot-dash interpreter.
+describe('ShortLongInterpreter', function() {
+    // The following array defines several test cases for the short-long interpreter.
     // Each test case consists of a list of events that come from the IoT device, 
-    // followed by a list of expected signals to result from the dot-dash interpreter.
-    // 300ms has been chosen for the dash length for convenience.
+    // followed by a list of expected signals to result from the short-long interpreter.
+    // 300ms has been chosen for the long length for convenience.
     var tests = [
         [
             // Events [<type of event>, <time of occurance>]
             [["start", 0], ["end", 400]],
-            // Expected results [<is a dash>, <time of signal start>]
+            // Expected results [<is a long event>, <time of signal start>]
             [[true, 0]]
         ],
         [
@@ -51,14 +51,14 @@ describe('DotDashInterpreter', function() {
     // Run through each test.
     tests.forEach(function(test) {
         const EVENTS = test[0];
-        const EXPECTED_DASH_DOTS = test[1];
+        const EXPECTED_LONG_SHORTS = test[1];
         
         // Make a nice test name string to display to the test runner.
         var eventString = EVENTS.map((x) => x[0] + " at " + x[1]).join(", ");
-        var resultString = EXPECTED_DASH_DOTS.map((x) => (x[0] ? "dash" : "dot") + " at " + x[1]).join(", ");
+        var resultString = EXPECTED_LONG_SHORTS.map((x) => (x[0] ? "long" : "short") + " at " + x[1]).join(", ");
         
         // Start the test
-        it('should signal "' + resultString + '" for events "' + eventString + '" (dash is 300 units)', function() {
+        it('should signal "' + resultString + '" for events "' + eventString + '" (long is 300 units)', function() {
             // Mock the Date object. This will make sure that time does not
             // effect our test case. Be 100% sure to reset it using a try 
             // block.
@@ -69,15 +69,15 @@ describe('DotDashInterpreter', function() {
             
                 var result = [];
                 var mockHardware = new EventEmitter();
-                var dotDash = new DotDashInterpreter(mockHardware, 300);
-                dotDash.on('signal', (isLong, startTime) => result.push([isLong, startTime.getTime()]));
+                var shortLong = new ShortLongInterpreter(mockHardware, 300);
+                shortLong.on('signal', (isLong, startTime) => result.push([isLong, startTime.getTime()]));
                 
                 EVENTS.forEach((x) => {
                     now = new OriginalDate(x[1]);
                     mockHardware.emit("motion" + x[0]);
                 });
                 
-                assert.deepEqual(EXPECTED_DASH_DOTS, result);
+                assert.deepEqual(EXPECTED_LONG_SHORTS, result);
             } finally {
                 Date = OriginalDate;
             }

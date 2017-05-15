@@ -11,7 +11,7 @@
 module.exports = (function(){
     "use strict";
     const EventEmitter = require('events');
-    const DotDashInterpreter = require('./dot-dash-interpreter');
+    const ShortLongInterpreter = require('./short-long-interpreter');
 
     // Morse code table to be referenced
     var morseTable = {
@@ -79,8 +79,8 @@ module.exports = (function(){
             // 1) if there are three units long since last signal => a short gap (between letters).
             // 2) if there are seven units long since last signal => a medium gap (between words).
             // In this case, a space is appened to the interpretation result 
-            var dotDash = new DotDashInterpreter(hardware, tickDuration * 3);
-            dotDash.on("signal", function(isDash, startTime) {
+            var shortLong = new ShortLongInterpreter(hardware, tickDuration * 3);
+            shortLong.on("signal", function(isLong, startTime) {
                 var now = Date.now();
                 if (me.lastSignalEndTime > 0) {
                     var ticksSinceLastSignal = (startTime - me.lastSignalEndTime) / tickDuration;
@@ -93,7 +93,7 @@ module.exports = (function(){
                     }
                 }
                 me.lastSignalEndTime = now;
-                me.currentLetter += isDash ? "L" : "S";
+                me.currentLetter += isLong ? "L" : "S";
                 me.emit('changed');
             });
         }
