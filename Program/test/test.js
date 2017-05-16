@@ -145,12 +145,24 @@ describe('MorseInterpreter', function() {
 
     // All test cases to be run
     var tests = [
-        // 1st test case
         [
             // Events [<type of event>, <time of occurance>]
-            [["start", 0], ["end", 400]],
+            [["start", 0], ["end", 100]],
             // Expected result [<expected result>]
-            "T"
+            "E"
+        ],
+        [
+            [["start", 0], ["end", 400], ["start", 500], ["end", 900]],
+            "M"
+        ],
+        [
+            [["start", 0], ["end", 100], ["start", 200], ["end", 500],
+             ["start", 600], ["end", 900], ["start", 1000], ["end", 1100]],
+            "P"
+        ],
+        [
+            [],
+            ""
         ],
         [
             morseEvents("===.===...===.===.===...=.===.=...=.=.=...=......." +

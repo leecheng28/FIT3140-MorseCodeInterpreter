@@ -9,6 +9,7 @@
  */
  (function() {
     "use strict";
+    const TICK_TIME = 1000;
 
     // Import libraries
     var ArduinoHardware = require("./lib/arduino-hardware.js");
@@ -35,7 +36,7 @@
     }
 
     // Interpret morse code and update firebase.
-    var morse = new MorseInterpreter(hardware, 1000);
+    var morse = new MorseInterpreter(hardware, TICK_TIME);
     morse.on('changed', function() {
         morseRef.set(morse.getState());
     });
