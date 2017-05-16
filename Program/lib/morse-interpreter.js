@@ -93,9 +93,6 @@ module.exports = (function(){
             // Current interpreting letter (in morse code, L's and S's)
             me.currentLetter = "";
 
-            // A collection of current letters
-            me.preLetters = [];
-
             // The time that the previous signal ended.
             me.lastSignalEndTime = 0;
 
@@ -122,8 +119,6 @@ module.exports = (function(){
                             // A word! Add a space.
                             me.interpreted += " ";
                         }
-                        // Store the current letter.
-                        me.preLetters.push(me.currentLetter);
 
                         // Clear out the current letter.
                         me.currentLetter = "";
@@ -149,7 +144,6 @@ module.exports = (function(){
             return {
                 "message": this.interpreted + interpret(this.currentLetter),
                 "currentLetter": this.currentLetter,
-                "preLetters": this.preLetters,
             }
         }
     };
