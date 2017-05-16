@@ -9,7 +9,7 @@
  */
  (function() {
     "use strict";
-    const TICK_TIME = 1000;
+    const TICK_TIME = 4000;
 
     // Import libraries
     var ArduinoHardware = require("./lib/arduino-hardware.js");
