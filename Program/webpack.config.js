@@ -1,5 +1,4 @@
 /**
-<<<<<<< HEAD
  * FIT3140 - Assignment 5. Team 29. Matthew Ready and Li Cheng.
  *
  * webpack.config.js - Defines how webpack takes modules with dependencies and

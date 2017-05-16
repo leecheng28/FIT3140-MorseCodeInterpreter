@@ -157,7 +157,7 @@ class ValueBox {
     /**
      * Constructs a ValueBox.
      *
-     * @constructor
+     * @constructor       
      * @this {ValueBox}
      * @param {SocketVariable} socket_variable SocketVariable to sync with.
      * @param {string} id DOM Element ID of an element.

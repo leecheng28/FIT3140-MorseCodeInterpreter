@@ -1,5 +1,5 @@
 /**
- * FIT3140 - Assignment 5. Team 29. 
+ * FIT3140 - Assignment 5. Team 29.
  *
  * morse-interpreter.js: MorseInterpreter interprets motionstart and motionend
  *                       events from a supplied hardware device into
@@ -12,7 +12,7 @@ module.exports = (function(){
     const EventEmitter = require('events');
     const ShortLongInterpreter = require('./short-long-interpreter');
 
-    // Morse code table to convert long and short motions to an english 
+    // Morse code table to convert long and short motions to an english
     // letter.
     var morseTable = {
         'SL'   : 'A',
@@ -47,7 +47,7 @@ module.exports = (function(){
      * Translates a motion sensor message into its matching letter
      *
      * @param {string} morse A motion sensor message composed of 'L' and 'S'
-     * @return {string} The matching letter in the morse code table. If none 
+     * @return {string} The matching letter in the morse code table. If none
      *                  could be found, the supplied string is surrounded with
      *                  tildes "~" and returned. This will show the user that
      *                  an invalid morse code was entered.
@@ -66,10 +66,10 @@ module.exports = (function(){
     /**
      * @class MorseInterpreter
      *
-     * MorseInterpreter interprets motionstart and motionend events from a 
+     * MorseInterpreter interprets motionstart and motionend events from a
      * supplied hardware device into corresponding letters.
      *
-     * This object will emit "changed" events when the state of the 
+     * This object will emit "changed" events when the state of the
      * interpreter changes
      */
     class MorseInterpreter extends EventEmitter {
@@ -86,22 +86,27 @@ module.exports = (function(){
         constructor(hardware, tickDuration) {
             super();
             var me = this;
-            
+
             // Interpretation results (in English)
             me.interpreted = "";
+
             // Current interpreting letter (in morse code, L's and S's)
             me.currentLetter = "";
+
+            // A collection of current letters
+            me.preLetters = [];
+
             // The time that the previous signal ended.
             me.lastSignalEndTime = 0;
 
             // Interpret long/short message based on following rules:
             // 1) If there are three time units since last signal => a short gap (between letters).
             // 2) If there are seven time units since last signal => a medium gap (between words).
-            //    In this case, a space is appened to the interpretation result 
+            //    In this case, a space is appended to the interpretation result
             var shortLong = new ShortLongInterpreter(hardware, tickDuration * 3);
             shortLong.on("signal", function(isLong, startTime) {
                 var now = Date.now();
-                
+
                 // Is there a previous signal?
                 if (me.lastSignalEndTime > 0) {
                     var ticksSinceLastSignal = (startTime - me.lastSignalEndTime) / tickDuration;
@@ -114,33 +119,37 @@ module.exports = (function(){
                             // A word! Add a space.
                             me.interpreted += " ";
                         }
+                        // Store the current letter.
+                        me.preLetters.push(me.currentLetter);
+
                         // Clear out the current letter.
                         me.currentLetter = "";
                     }
                 }
-                
+
                 // Note down the signal.
                 me.lastSignalEndTime = now;
                 me.currentLetter += isLong ? "L" : "S";
-                
+
                 // Notify listeners that the message has changed.
                 me.emit('changed');
             });
         }
 
-        // Returns a JavaScript object representing the state of the 
-        // interpretation
+        // Returns a JavaScript object representing the state of the
+        // interpretation.
         // "message" is composed of the english representation of the current
-        // signal. "currentLetter" is the matching letter from the morse code 
-        // table.
+        // signal. "currentLetter" is the matching letter from the morse code
+        // table. "preLetters" is a collection of currentLetter, a collection of
+        // detected motion signals.
         getState() {
             return {
                 "message": this.interpreted + interpret(this.currentLetter),
                 "currentLetter": this.currentLetter,
+                "preLetters": this.preLetters,
             }
         }
     };
-    
+
     return MorseInterpreter;
 })();
-
