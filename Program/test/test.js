@@ -177,6 +177,12 @@ describe('MorseInterpreter', function() {
             "SPHINX OF BLACK QUARTZ JUDGE MY VOW",
             "should understand every english letter"
         ],
+        [
+            morseEvents("=.=.=.=.=...===.===.===.===.===...===.=.=.=.===..."+
+                        "=.=.=.......===.===.===...=.=.="),
+            "~SSSSS~~LLLLL~~LSSSL~S OS",
+            "should use tildes (~) to signify an unknown code and then recover"
+        ],
     ];
 
     // Run through each test case
