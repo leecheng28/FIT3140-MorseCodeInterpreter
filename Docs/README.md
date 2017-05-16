@@ -8,6 +8,8 @@ cases for two user stories. They are,
 2) As an app user, I want to decode the motion sensor messages to be decoded into English letters based on Morse code coding 
 table.
  
-More details about morse code can be found in assignment 5 sepc morse code decoder pdf file. ![Click here!](https://github.com/FIT3140-S1-2017/assignment-5-team29/blob/master/FIT3140Assignment5%20Morse%20Code%20Decoder.pdf)
+More details about morse code can be found in assignment 5 sepc morse code decoder pdf file. [assignment 5 spec](https://github.com/FIT3140-S1-2017/assignment-5-team29/blob/master/Docs/FIT3140Assignment5%20MorseCodeDecoder.pdf)
+
+
 
 
