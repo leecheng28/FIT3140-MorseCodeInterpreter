@@ -8,26 +8,26 @@ This is the first iteration of assignment 5, we have a list of user stories to i
 
 Each user story test is made up of simple test cases(normal program behavior), error test cases(program behavior upon accepting wrong inputs), complex test cases(if applicable). Mocha and Chai testing framework are used to implement the testing.
 
-For more information about tests. [test plan](TODO. http link)
+For more information about tests, please see the test plan [here](https://github.com/FIT3140-S1-2017/assignment-5-team29/raw/master/Docs/TestPlans.pdf)
 
 For more details about morse code can be found in assignment 5 sepc morse code decoder pdf file. [assignment 5 spec](https://github.com/FIT3140-S1-2017/assignment-5-team29/blob/master/Docs/FIT3140Assignment5%20MorseCodeDecoder.pdf)
 
 ## Run the program ##
 Clone the repository.
 ```bash
-git clone https://github.com/FIT3140-S1-2017/assignment-4-team29
+git clone https://github.com/FIT3140-S1-2017/assignment-5-team29
 ```
-Move into unit test subdirectory.
+Move into Program subdirectory.
 ```bash
-cd assignment-5-team29/Program/test
+cd assignment-5-team29/Program
 ```
 Install all required dependencies
 ```bash
 npm install
 ```
-Run two test in one go
+Run two tests in one go
 ```bash
-mocha test.js
+./node_modules/mocha/bin/mocha
 ```
 
 ## Who do I talk to? ##
