@@ -11,6 +11,7 @@ module.exports = (function(){
     "use strict";
     const readline = require('readline');
     const EventEmitter = require('events');
+    const colors = require('colors/safe');
 
     /**
      * Constructs a VirtualHardware interface to simulate an ardunio device.
@@ -38,9 +39,9 @@ module.exports = (function(){
         
         // Queries the user and toggles motion state when triggered.
         function askQuestion() {
-            rl.question("Virtual Hardware: Press [ENTER] to toggle motion. " +
+            rl.question(colors.grey("Virtual Hardware: Press [ENTER] to toggle motion. " +
                         "Motion is currently " + 
-                        (me.motionState ? "ON" : "OFF") + ".", toggleState);
+                        (me.motionState ? "ON" : "OFF") + "."), toggleState);
         }
         
         // Asks the query question after 100ms to simulate a short 
