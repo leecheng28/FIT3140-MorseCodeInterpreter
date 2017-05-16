@@ -11,6 +11,37 @@ const MorseInterpreter = require('../lib/morse-interpreter.js');
 const ShortLongInterpreter = require('../lib/short-long-interpreter.js');
 const EventEmitter = require('events');
 
+
+function mockHardwareEvents(events, hardwareSetup) {
+    // Mock the Date object. This will make sure that time does not
+    // effect our test case. Be 100% sure to reset it using a try
+    // block.
+    var OriginalDate = Date;
+    try {
+        var now = new OriginalDate(0);
+        Date = { now: () => now };
+
+        // Make a mock hardware object to use.
+        var mockHardware = new EventEmitter();
+        
+        // Supply the hardware to the setup callback
+        hardwareSetup(mockHardware);
+
+        // Run every event.
+        events.forEach((x) => {
+            now = new OriginalDate(x[1]);
+            mockHardware.emit("motion" + x[0]);
+        });
+    } finally {
+        Date = OriginalDate;
+    }
+}
+
+function eventsToString(events) {
+    return events.map((x) => x[0] + " at " + x[1]).join(", ");
+}
+
+
 // 1. User Story: Determine whether incoming message is short/long
 describe('ShortLongInterpreter', function() {
     // The following array defines several test cases for the short-long interpreter.
@@ -42,19 +73,24 @@ describe('ShortLongInterpreter', function() {
         ],
         [
             [["start", 0], ["end", 100], ["end", 300]],
-            [[false, 0]]
+            [[false, 0]],
+            // Overrides the test case name
+            "should ignore multiple end events",
         ],
         [
             [["start", 0], ["start", 100], ["end", 300]],
-            [[true, 0]]
+            [[true, 0]],
+            "should ignore multiple start events",
         ],
         [
             [["start", 0], ["end", 100], ["start", 150], ["end", 300]],
-            [[false, 0], [false, 150]]
+            [[false, 0], [false, 150]],
+            "should handle multiple events (just dots)",
         ],
         [
             [["start", 0], ["end", 100], ["start", 150], ["end", 600], ["start", 601], ["end", 602]],
-            [[false, 0], [true, 150], [false, 601]]
+            [[false, 0], [true, 150], [false, 601]],
+            "should handle multiple events (dots and dashes)",
         ],
     ];
 
@@ -62,45 +98,50 @@ describe('ShortLongInterpreter', function() {
     tests.forEach(function(test) {
         const EVENTS = test[0];
         const EXPECTED_SIGNALS = test[1];
-
-        // Make a nice test name string to display to the test runner.
-        var eventString = EVENTS.map((x) => x[0] + " at " + x[1]).join(", ");
-        var resultString = EXPECTED_SIGNALS.map((x) => (x[0] ? "long" : "short") + " at " + x[1]).join(", ");
-
+        var message = test[2];
+        if (message === undefined) {
+            // Make a nice test name string to display to the test runner.
+            var resultString = EXPECTED_SIGNALS.map((x) => (x[0] ? "long" : "short") + " at " + x[1]).join(", ");
+            message = 'should signal "' + resultString + '" for events "' + eventsToString(EVENTS) + '" (long is 300 units)';
+        }
+        
         // Start the test
-        it('should signal "' + resultString + '" for events "' + eventString + '" (long is 300 units)', function() {
-            // Mock the Date object. This will make sure that time does not
-            // effect our test case. Be 100% sure to reset it using a try
-            // block.
-            var OriginalDate = Date;
-            try {
-                var now = new OriginalDate(0);
-                Date = { now: () => now };
-
-                var result = [];
-                var mockHardware = new EventEmitter();
+        it(message, function() {
+            var result = [];
+        
+            mockHardwareEvents(EVENTS, (mockHardware) => {
                 var shortLong = new ShortLongInterpreter(mockHardware, 300);
 
                 // Append signals to the result array.
                 shortLong.on('signal', (isLong, startTime) => result.push([isLong, startTime.getTime()]));
+            });
 
-                // Run every event.
-                EVENTS.forEach((x) => {
-                    now = new OriginalDate(x[1]);
-                    mockHardware.emit("motion" + x[0]);
-                });
-
-                // Make sure the signals are correct.
-                assert.deepEqual(EXPECTED_SIGNALS, result);
-            } finally {
-                Date = OriginalDate;
-            }
+            // Make sure the signals are correct.
+            assert.deepEqual(EXPECTED_SIGNALS, result);
         });
     });
 });
 
 // 2. User Story: Decode motion sensor messages into English letters.
-describe('DecodeMotionSensorMessages', function() {
+describe('MorseInterpreter', function() {
+
+    function morseEvents(signal) {
+        signal += ".";
+        
+        var events = [];
+        var time = 0;
+        var state = ".";
+        
+        for (var i = 0; i < signal.length; i++) {
+            if (state != signal[i]) {
+                state = signal[i];
+                events.push([state == "." ? 'end' : 'start', time]);
+            }
+            time += 100;
+        }
+        
+        return events;
+    }
 
     // All test cases to be run
     var tests = [
@@ -109,31 +150,55 @@ describe('DecodeMotionSensorMessages', function() {
             // Events [<type of event>, <time of occurance>]
             [["start", 0], ["end", 400]],
             // Expected result [<expected result>]
-            [["T"]]
+            "T"
         ],
-        // 2nd test case
-
+        [
+            morseEvents("===.===...===.===.===...=.===.=...=.=.=...=......." +
+                        "===.=.===.=...===.===.===...===.=.=...="),
+            "MORSE CODE",
+            // Overrides the test case name
+            "should understand the signal \"MORSE CODE\""
+        ],
+        [
+            morseEvents("====..====....========.===..====....=.====.==....=" +
+                        "=.==.==......==.........====.=.====.==....===..===" +
+                        "=====.===...===.=..=...="),
+            "MORSE CODE",
+            "should understand the signal \"MORSE CODE\", even when timing is not perfect"
+        ],
+        [
+            morseEvents("=.=.=...=.===.===.=...=.=.=.=...=.=...===.=...===." +
+                        "=.=.===.......===.===.===...=.=.===.=.......===.=." +
+                        "=.=...=.===.=.=...=.===...===.=.===.=...===.=.===." + 
+                        "......===.===.=.===...=.=.===...=.===...=.===.=..." +
+                        "===...===.===.=.=.......=.===.===.===...=.=.===..." +
+                        "===.=.=...===.===.=...=.......===.===...===.=.===." +
+                        "===.......=.=.=.===...===.===.===...=.===.==="),
+            "SPHINX OF BLACK QUARTZ JUDGE MY VOW",
+            "should understand every english letter"
+        ],
     ];
 
     // Run through each test case
     tests.forEach(function(test) {
         const EVENTS = test[0];
-        const EXPECTED_RESULT = test[1];
-
-        // Make test name string to display to the test runner
-        var resultString = EXPECTED_SIGNALS.map((x) => (x[0] ? "long" : "short") + " at " + x[1]).join(", ");
-        var eventString = EVENTS.map((x) => x[0] + " at " + x[1]).join(", ");
-
+        const EXPECTED_MESSAGE = test[1];
+        var message = test[2];
+        if (message === undefined) {
+            // Make a nice test name string to display to the test runner.
+            message = 'should receive message "' + EXPECTED_MESSAGE + '" for events "' + eventsToString(EVENTS) + '" (long is 300 units)';
+        }
+        
         // Start the test
-        it('Expected decoded result ' + expectedResult + ', for input message '
-        + inputMessage, function() {
+        it(message, function() {
+            var morse;
+            
+            mockHardwareEvents(EVENTS, (mockHardware) => {
+                morse = new MorseInterpreter(mockHardware, 100);
+            });
 
-            var mockHardware = new EventEmitter();
-//          var morse = new MorseInterpreter(mockHardware, 1000);
-            let result = morse.interpret(inputMessage);
-
-            // Make sure the decoded message matches expected result
-//            assert.deepEqual(expectedResult, result);
+            // Make sure the signals are correct.
+            assert.deepEqual(EXPECTED_MESSAGE, morse.getState().message);
         });
     });
 });
