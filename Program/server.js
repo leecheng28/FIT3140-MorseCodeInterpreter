@@ -15,6 +15,7 @@
     var VirtualHardware = require("./lib/virtual-hardware.js");
     var MorseInterpreter = require("./lib/morse-interpreter.js");
     var admin = require("firebase-admin");
+    var moment = require("moment");
 
     // Initialize the hardware implementation. Depends on server startup parameters.
     var hardware = process.argv.length == 3 && process.argv[2] == 'virtual' ? new VirtualHardware() : new ArduinoHardware();
@@ -28,11 +29,21 @@
     // Access the firebase database.
     var db = admin.database();
     var morseRef = db.ref("morse");
+    
+    function formatTime(time) {
+        return moment(time).format('MMMM Do YYYY, h:mm:ss a');
+    }
 
     // Interpret morse code and update firebase.
     var morse = new MorseInterpreter(hardware, 1000);
     morse.on('changed', function() {
-        console.log("Morse changed: " + JSON.stringify(morse.getState()));
         morseRef.set(morse.getState());
     });
+    morse.on('signal', function(isLong, startTime) {
+        console.log("A " + (isLong ? "long" : "short") + 
+                    " motion has been detected at " + formatTime(startTime));
+    });
+    
+    hardware.on("motionstart", () => console.log("Motion start event occurred at " + formatTime(Date.now())));
+    hardware.on("motionend", () => console.log("Motion end event occurred at " + formatTime(Date.now())));
 }());

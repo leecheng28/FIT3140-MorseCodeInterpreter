@@ -105,6 +105,9 @@ module.exports = (function(){
             //    In this case, a space is appended to the interpretation result
             var shortLong = new ShortLongInterpreter(hardware, tickDuration * 3);
             shortLong.on("signal", function(isLong, startTime) {
+                // Forward event to any listeners.
+                me.emit('signal', isLong, startTime);
+                
                 var now = Date.now();
 
                 // Is there a previous signal?
