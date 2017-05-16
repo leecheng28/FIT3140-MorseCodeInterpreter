@@ -1,12 +1,11 @@
 /**
- * FIT3140 - Assignment 5. Team 29. 
+ * FIT3140 - Assignment 5. Team 29.
  *
- * index.js: Client-side program receives motion sensor message(long/short), decodes
- * the messages into English letters, and print the decoded messages. 
+ * index.js: Client-side program prints the decoded messages and shows the
+ *           dots and dashes in the letter currently being received.
  *
- * @author Matthew Ready, Xavier Taylor, Li Cheng
+ * @author Matthew Ready, Li Cheng
  */
-
 import firebase from 'firebase';
 import publicFirebaseConfig from './config/publicFirebaseConfig.js';
 
@@ -23,7 +22,7 @@ require('file?name=[name].[ext]!./html/index.html');
  * @class SocketVariable
  *
  * Encapsulates a variable shared between the server and client. Changes to
- * the value can be made by calling setValue, and changes can be listened to 
+ * the value can be made by calling setValue, and changes can be listened to
  * by using the "onChange" function.
  */
 class SocketVariable {
@@ -40,7 +39,7 @@ class SocketVariable {
         let me = this;
         this.callbacks = []
         this.ref = ref;
-        
+
         // When the server notifies us of the state, notify all our bound
         // callbacks with new value of this variable.
         this.ref.on("value", (snapshot) =>
@@ -52,7 +51,7 @@ class SocketVariable {
             me.callbacks.forEach((x) => { x(val); });
         });
     }
-    
+
     /**
      * Sets the value of the SocketVariable.
      *
@@ -62,13 +61,13 @@ class SocketVariable {
     setValue(value) {
         this.ref.set(value);
     }
-    
+
     /**
      * Binds an variable listener. This listener will receive the value of
      * this variable whenever the server notifies us.
      *
      * @this {SocketVariable}
-     * @param callback The callback. Takes one argument: the value of this 
+     * @param callback The callback. Takes one argument: the value of this
                        variable.
      */
     onChange(callback) {
@@ -79,7 +78,7 @@ class SocketVariable {
 /**
  * @class Socket
  *
- * Encapsulates the bi-directional communication with the server using 
+ * Encapsulates the bi-directional communication with the server using
  * Firebase. You should use this to gain access to SocketVariables by using
  * the getVariable method.
  */
@@ -99,8 +98,7 @@ class Socket {
     /**
      * Gets a SocketVariable by name.
      *
-     * @this {Socket}
-     * @param {string} name The name of the variable. Please use a SOCVAR_ 
+     * @param {string} name The name of the variable. Please use a SOCVAR_
      *                      from socketNames, so we can keep them all in one
      *                      place.
      * @param {string} defaultValue Default value to use when null.
@@ -134,13 +132,13 @@ class CheckBox {
         let me = this;
         this.element = document.getElementById(id);
         socket_variable.onChange(function(x) { me.setValue(x); });
-        
+
         // When the checkbox is changed, update the SocketVariable.
         this.element.addEventListener("change", (e) => {
             socket_variable.setValue(me.element.checked);
         });
     }
-    
+
     /**
      * Sets whether or not the checkbox is checked.
      */
@@ -152,7 +150,7 @@ class CheckBox {
 /**
  * @class ValueBox
  *
- * Constructs a ValueBox (it just shows the value of an associated 
+ * Constructs a ValueBox (it just shows the value of an associated
  * SocketVariable.
  */
 class ValueBox {
@@ -169,7 +167,7 @@ class ValueBox {
         this.element = document.getElementById(id);
         socket_variable.onChange(function(x) { me.setValue(x); });
     }
-    
+
     /**
      * Sets the text of the ValueBox.
      */
@@ -182,8 +180,8 @@ class ValueBox {
 window.onload = () => {
     let socket = new Socket(publicFirebaseConfig);
 
-    // Create new objects to deal with each of the variables. We don't need
-    // to keep a reference around for anything.
+    // Create new objects to show each of the two important variables to the
+    // user (the current message and the current letter)
     new ValueBox(socket.getVariable("morse/message", ""), "message");
     new ValueBox(socket.getVariable("morse/currentLetter", ""), "current-letter");
 };

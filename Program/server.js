@@ -1,12 +1,12 @@
 /**
  * FIT3140 - Assignment 5. Team 29. 
  *
- * server.js: Server-side program listens to motion sensor signals, determines short/long
- * signals, and sends the signals to firebase database
+ * server.js: Server-side program listens to motion sensor signals, 
+ * determines short/long signals, decodes them and sends the results to 
+ * firebase.
  *
  * @author Matthew Ready, Li Cheng
  */
-
  (function() {
     "use strict";
 
@@ -29,7 +29,7 @@
     var db = admin.database();
     var morseRef = db.ref("morse");
 
-    // Determine short/long motion sensor signal
+    // Interpret morse code and update firebase.
     var morse = new MorseInterpreter(hardware, 1000);
     morse.on('changed', function() {
         console.log("Morse changed: " + JSON.stringify(morse.getState()));

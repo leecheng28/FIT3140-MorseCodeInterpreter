@@ -1,8 +1,11 @@
-/*
-  FIT3140 - Assignment 5. Team 29. Matthew Ready and Xavier Taylor.
- 
-  index.scss: Basic client side styling.
-*/
+/**
+ * FIT3140 - Assignment 5. Team 29.
+ *
+ * index.scss: Defines basic styling for the webpage.
+ *
+ * @author Matthew Ready, Li Cheng
+ */
+>>>>>>> ebe8102bf31aa381998918be07f206a77b0b10bf
 
 body {
     font-family: 'rubiklight';
@@ -20,13 +23,13 @@ h1 {
     margin-right: auto;
     margin-bottom: 20px;
     padding: 20px;
-    
+
     border-radius: 2px;
     border-top: 1px solid #F0F0F0;
     border-bottom: 1px solid #E0E0E0;
     background-color: #E8E8E8;
     box-shadow: 0px 0px 8px -1px rgba(0,0,0,0.2);
-        
+
     h2 {
         font-family: 'rubikmedium';
         font-size: 16px;
@@ -34,20 +37,20 @@ h1 {
         margin-bottom: 32px;
         text-align: center;
     }
-    
+
     div.value-row {
         margin-top: 20px;
         font-size: 18px;
         width: 100%;
         color: #111;
         text-align: left;
-    
+
         div.right-side {
             float: right;
             position: relative;
             text-align: center;
         }
-        
+
         div.value {
             font-family: 'rubikmedium';
         }

@@ -1,9 +1,9 @@
 /**
- * FIT3140 - Assignment 5. Team 29. Matthew Ready and Xavier Taylor.
+<<<<<<< HEAD
+ * FIT3140 - Assignment 5. Team 29. Matthew Ready and Li Cheng.
  *
- * webpack.config.js - Webpack takes modules with dependencies and generate static assets representing 
- * those modules. 
- *
+ * webpack.config.js - Defines how webpack takes modules with dependencies and
+ * generate static assets representing those modules.
  */
 
 // Import libraries
@@ -22,10 +22,12 @@ if (!isDevServer) {
 }
 
 module.exports = {
+
   // Here the application starts executing, webpack starts building
   entry: {
     client: './client.js'
   },
+
   // how webpack emits the results
   output: {
     path: './public',
@@ -33,10 +35,13 @@ module.exports = {
     filename: '[name].entry.js',
     chunkFilename: "[id].chunk.js"
   },
+
+  // supply connection port number
   devServer: {
     inline: true,
     port: 3333
   },
+
   // configuration regarding modules
   module: {
     loaders: [
@@ -69,5 +74,3 @@ module.exports = {
   },
   plugins: plugins
 }
-
-
