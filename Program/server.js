@@ -9,7 +9,7 @@
  */
  (function() {
     "use strict";
-    const TICK_TIME = 4000;
+    const TICK_TIME = 1000;
 
     // Import libraries
     var ArduinoHardware = require("./lib/arduino-hardware.js");
@@ -41,8 +41,9 @@
         morseRef.set(morse.getState());
     });
     morse.on('signal', function(isLong, startTime) {
-        console.log("A " + (isLong ? "long" : "short") + 
-                    " motion has been detected at " + formatTime(startTime));
+	    console.log("A " + (isLong ? "long" : "short") + 
+	                " motion has been detected at " + formatTime(startTime) +
+	                (morse.isInterpreting ? "" : " (but it was ignored since we are not interpreting)"));
     });
     
     hardware.on("motionstart", () => console.log("Motion start event occurred at " + formatTime(Date.now())));

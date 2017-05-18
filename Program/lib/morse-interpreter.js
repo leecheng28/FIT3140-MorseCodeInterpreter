@@ -69,6 +69,7 @@ module.exports = (function(){
         'SLSSLS': '"',
         'SSSLSSL': '$',
         'SLLSLS': '@',
+        'SSSLSL': '',
     };
 
     /**
@@ -114,6 +115,10 @@ module.exports = (function(){
         constructor(hardware, tickDuration) {
             super();
             var me = this;
+            
+            // Are we interpreting the signals right now? The user or the 
+            // end-signal signal can stop the process.
+            me.isInterpreting = true;
 
             // Interpretation results (in English)
             me.interpreted = "";
@@ -130,8 +135,13 @@ module.exports = (function(){
             //    In this case, a space is appended to the interpretation result
             var shortLong = new ShortLongInterpreter(hardware, tickDuration * 3);
             shortLong.on("signal", function(isLong, startTime) {
-                // Forward event to any listeners.
+            	// Forward event to any listeners.
                 me.emit('signal', isLong, startTime);
+                
+            	if (!me.isInterpreting) {
+            		console.log('bad');
+            		return;
+            	}
                 
                 var now = Date.now();
 
@@ -142,14 +152,22 @@ module.exports = (function(){
                         // A new letter or a new word!
                         // Interpret the current letter and append it to the
                         // total message.
-                        me.interpreted += interpret(me.currentLetter);
+                        var interpretation = interpret(me.currentLetter);
+
+                        // Clear out the current letter.
+                        me.currentLetter = "";
+                        
+                        // Is this the end of the signal?
+                        if (interpretation == '') {
+                        	me.isInterpreting = false;
+                        	return;
+                        }
+                        
+                        me.interpreted += interpretation;
                         if (ticksSinceLastSignal >= 7) {
                             // A word! Add a space.
                             me.interpreted += " ";
                         }
-
-                        // Clear out the current letter.
-                        me.currentLetter = "";
                     }
                 }
 
@@ -172,6 +190,7 @@ module.exports = (function(){
             return {
                 "message": this.interpreted + interpret(this.currentLetter),
                 "currentLetter": this.currentLetter,
+                "isInterpreting": this.isInterpreting,
             }
         }
     };
