@@ -157,12 +157,6 @@ module.exports = (function(){
                         // Clear out the current letter.
                         me.currentLetter = "";
                         
-                        // Is this the end of the signal?
-                        if (interpretation == '') {
-                        	me.isInterpreting = false;
-                        	return;
-                        }
-                        
                         me.interpreted += interpretation;
                         if (ticksSinceLastSignal >= 7) {
                             // A word! Add a space.
@@ -174,10 +168,22 @@ module.exports = (function(){
                 // Note down the signal.
                 me.lastSignalEndTime = now;
                 me.currentLetter += isLong ? "L" : "S";
+                
+                if (interpret(me.currentLetter) == '') {
+                	me.isInterpreting = false;
+                	me.currentLetter = "";
+                }
 
                 // Notify listeners that the message has changed.
                 me.emit('changed');
             });
+        }
+        
+        clear() {
+        	this.interpreted = "";
+        	this.currentLetter = "";
+            this.lastSignalEndTime = 0;
+            this.emit('changed');
         }
 
         // Returns a JavaScript object representing the state of the

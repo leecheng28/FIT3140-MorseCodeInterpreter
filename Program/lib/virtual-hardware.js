@@ -41,7 +41,7 @@ module.exports = (function(){
         function askQuestion() {
             rl.question(colors.grey("Virtual Hardware: Press [ENTER] to toggle motion. " +
                         "Motion is currently " + 
-                        (me.motionState ? "ON" : "OFF") + "."), toggleState);
+                        (me.motionState ? "ON" : "OFF") + ".\n"), toggleState);
         }
         
         // Asks the query question after 100ms to simulate a short 

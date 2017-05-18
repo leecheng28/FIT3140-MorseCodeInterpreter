@@ -184,4 +184,5 @@ window.onload = () => {
     // user (the current message and the current letter)
     new ValueBox(socket.getVariable("morse/message", ""), "message");
     new ValueBox(socket.getVariable("morse/currentLetter", ""), "current-letter");
+    new CheckBox(socket.getVariable("morse/isInterpreting", ""), "is-interpreting");
 };

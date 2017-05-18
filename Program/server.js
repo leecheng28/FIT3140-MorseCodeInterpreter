@@ -17,6 +17,7 @@
     var MorseInterpreter = require("./lib/morse-interpreter.js");
     var admin = require("firebase-admin");
     var moment = require("moment");
+    var colors = require('colors/safe');
 
     // Initialize the hardware implementation. Depends on server startup parameters.
     var hardware = process.argv.length == 3 && process.argv[2] == 'virtual' ? new VirtualHardware() : new ArduinoHardware();
@@ -44,6 +45,17 @@
 	    console.log("A " + (isLong ? "long" : "short") + 
 	                " motion has been detected at " + formatTime(startTime) +
 	                (morse.isInterpreting ? "" : " (but it was ignored since we are not interpreting)"));
+    });
+    
+    db.ref("morse/isInterpreting").on('value', function(snapshot) {
+	    var nowIsInterpreting = !(snapshot.val() === false);
+    	if (morse.isInterpreting !== nowIsInterpreting) {
+			morse.isInterpreting = nowIsInterpreting;
+			if (nowIsInterpreting) {
+				morse.clear();
+			}
+			console.log(colors.red("We are now " + (morse.isInterpreting ? "" : "not ") + "interpreting"));
+    	}
     });
     
     hardware.on("motionstart", () => console.log("Motion start event occurred at " + formatTime(Date.now())));
