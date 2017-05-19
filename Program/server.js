@@ -1,8 +1,8 @@
 /**
- * FIT3140 - Assignment 5. Team 29. 
+ * FIT3140 - Assignment 5. Team 29.
  *
- * server.js: Server-side program listens to motion sensor signals, 
- * determines short/long signals, decodes them and sends the results to 
+ * server.js: Server-side program listens to motion sensor signals,
+ * determines short/long signals, decodes them and sends the results to
  * firebase.
  *
  * @author Matthew Ready, Li Cheng
@@ -31,22 +31,28 @@
     // Access the firebase database.
     var db = admin.database();
     var morseRef = db.ref("morse");
-    
+
     function formatTime(time) {
         return moment(time).format('MMMM Do YYYY, h:mm:ss a');
     }
 
     // Interpret morse code and update firebase.
     var morse = new MorseInterpreter(hardware, TICK_TIME);
+
+    // When there's a change in state of morse interpreter, update the morse
+    // interpreter on firebase.
     morse.on('changed', function() {
         morseRef.set(morse.getState());
     });
+
+    // Console log 1) motion type(long/short), 2) motion start time,
+    // 3) interpreting mode(yes/no).
     morse.on('signal', function(isLong, startTime) {
-	    console.log("A " + (isLong ? "long" : "short") + 
+	    console.log("A " + colors.red((isLong ? "long" : "short")) +
 	                " motion has been detected at " + formatTime(startTime) +
 	                (morse.isInterpreting ? "" : " (but it was ignored since we are not interpreting)"));
     });
-    
+
     db.ref("morse/isInterpreting").on('value', function(snapshot) {
 	    var nowIsInterpreting = !(snapshot.val() === false);
     	if (morse.isInterpreting !== nowIsInterpreting) {
@@ -57,7 +63,7 @@
 			console.log(colors.red("We are now " + (morse.isInterpreting ? "" : "not ") + "interpreting"));
     	}
     });
-    
+
     hardware.on("motionstart", () => console.log("Motion start event occurred at " + formatTime(Date.now())));
     hardware.on("motionend", () => console.log("Motion end event occurred at " + formatTime(Date.now())));
 }());

@@ -98,7 +98,7 @@ module.exports = (function(){
      * MorseInterpreter interprets motionstart and motionend events from a
      * supplied hardware device into corresponding letters.
      *
-     * This object will emit "changed" events when the state of the
+     * This object will emit "changed" events when the state of morse
      * interpreter changes
      */
     class MorseInterpreter extends EventEmitter {
@@ -115,8 +115,8 @@ module.exports = (function(){
         constructor(hardware, tickDuration) {
             super();
             var me = this;
-            
-            // Are we interpreting the signals right now? The user or the 
+
+            // Are we interpreting the signals right now? The user or the
             // end-signal signal can stop the process.
             me.isInterpreting = true;
 
@@ -137,12 +137,12 @@ module.exports = (function(){
             shortLong.on("signal", function(isLong, startTime) {
             	// Forward event to any listeners.
                 me.emit('signal', isLong, startTime);
-                
+
             	if (!me.isInterpreting) {
             		console.log('bad');
             		return;
             	}
-                
+
                 var now = Date.now();
 
                 // Is there a previous signal?
@@ -156,7 +156,7 @@ module.exports = (function(){
 
                         // Clear out the current letter.
                         me.currentLetter = "";
-                        
+
                         me.interpreted += interpretation;
                         if (ticksSinceLastSignal >= 7) {
                             // A word! Add a space.
@@ -168,7 +168,8 @@ module.exports = (function(){
                 // Note down the signal.
                 me.lastSignalEndTime = now;
                 me.currentLetter += isLong ? "L" : "S";
-                
+
+                // When nothing is required to be interpreted
                 if (interpret(me.currentLetter) == '') {
                 	me.isInterpreting = false;
                 	me.currentLetter = "";
@@ -178,7 +179,7 @@ module.exports = (function(){
                 me.emit('changed');
             });
         }
-        
+
         clear() {
         	this.interpreted = "";
         	this.currentLetter = "";
@@ -190,8 +191,8 @@ module.exports = (function(){
         // interpretation.
         // "message" is composed of the english representation of the current
         // signal. "currentLetter" is the matching letter from the morse code
-        // table. "preLetters" is a collection of currentLetter, a collection of
-        // detected motion signals.
+        // table. "isInterpreting" is a flag indicating whether it's in
+        // interpretation mode.
         getState() {
             return {
                 "message": this.interpreted + interpret(this.currentLetter),
