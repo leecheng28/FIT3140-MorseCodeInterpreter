@@ -151,7 +151,7 @@ class CheckBox {
  * @class ValueBox
  *
  * Constructs a ValueBox (it just shows the value of an associated
- * SocketVariable.
+ * SocketVariable.)
  */
 class ValueBox {
     /**
@@ -176,13 +176,59 @@ class ValueBox {
     }
 }
 
+/**
+ * @class MorseValueBox
+ *
+ * Constructs a MorseValueBox (it shows the value of an associated
+ * SocketVariable and colours unknown codes correctly)
+ */
+class MorseValueBox {
+    /**
+     * Constructs a MorseValueBox.
+     *
+     * @constructor       
+     * @this {ValueBox}
+     * @param {SocketVariable} socket_variable SocketVariable to sync with.
+     * @param {string} id DOM Element ID of an element.
+     */
+    constructor(socket_variable, id) {
+        let me = this;
+        this.element = document.getElementById(id);
+        socket_variable.onChange(function(x) { me.setValue(x); });
+    }
+
+    /**
+     * Sets the text of the ValueBox.
+     */
+    setValue(value) {
+        this.element.innerHTML = "";
+        var split = value.split("~");
+        split.forEach((x, index) => {
+            if (index % 2 == 0) {
+                this.element.appendChild(document.createTextNode(x));
+            } else {
+                var span = document.createElement("span");
+                span.innerText = x;
+                span.className = "unknown-code";
+                this.element.appendChild(span);
+            }
+        });
+        if (split.length > 1) {
+            var div = document.createElement("div");
+            div.innerText = "(unknown codes appear in red)";
+            div.className = "unknown-code-explained";
+            this.element.appendChild(div);
+        }
+    }
+}
+
 // When the page loads...
 window.onload = () => {
     let socket = new Socket(publicFirebaseConfig);
 
     // Create new objects to show each of the two important variables to the
     // user (the current message and the current letter)
-    new ValueBox(socket.getVariable("morse/message", ""), "message");
+    new MorseValueBox(socket.getVariable("morse/message", ""), "message");
     new ValueBox(socket.getVariable("morse/currentLetter", ""), "current-letter");
     new CheckBox(socket.getVariable("morse/isInterpreting", ""), "is-interpreting");
 };

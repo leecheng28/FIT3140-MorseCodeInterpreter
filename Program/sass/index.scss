@@ -53,6 +53,15 @@ h1 {
         div.value {
             font-family: 'rubikmedium';
         }
+            
+        span.unknown-code {
+            color: red;
+        }
+
+        div.unknown-code-explained {
+            font-size: 12px;
+            font-family: 'rubiklight_italic';
+        }
 
         a {
             display: inline-block;
