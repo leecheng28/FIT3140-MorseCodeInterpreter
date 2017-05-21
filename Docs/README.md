@@ -40,15 +40,15 @@ Run two tests in one go
 # Iteration 2 #
 ## Iteration Description ##
 This is the second iteration of assignment 5, we have a priortized list of goals. They are, 
-1) Add support for numeric digits (0..9), punctuations marks available for morse code (?@-$). 
-2) Step the process at the server side if the Prosign ‘SK, End of transmission’ (SSSLSL) occurs.
+1) Add support for numeric digits (0..9), punctuations marks available for morse code (?@-$...). 
+2) Stop the process at the server side if the Prosign ‘SK, End of transmission’ (SSSLSL) occurs.
 3) Polish the client side interface (web page).
 4) Allow the client side to stop and start the transmission process.
 
 ## Run the program ##
 0. Open up Terminal.app
 
-1. If you have not cloned the repository yet, this helps you set up the iteration 2 programs
+1. If you have not cloned this repository yet, this helps you set up the iteration 2 programs
 ```bash
 git clone https://github.com/FIT3140-S1-2017/assignment-5-team29
 cd assignment-5-team29/Program
@@ -68,7 +68,9 @@ node server.js
 
 3. In your browser, copy and paste "localhost:3333" into your broswer address bar. Hit "Enter/Return".
 
-4. In your terminal, trigger motions by pressing "Enter/Return" key. Follow the on-screen instructions and ave fun!
+4. In your terminal, send messages by pressing "Enter/Return" key. Follow the on-screen instructions for sending more messages.
+
+Have fun!
 
 Note. If you have problems configuring your physical arduino device, please refer to "Hardware Structure" [here](https://github.com/FIT3140-S1-2017/assignment-3-team29). 
 
