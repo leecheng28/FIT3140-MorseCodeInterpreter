@@ -52,6 +52,10 @@
 	                " motion has been detected at " + formatTime(startTime) +
 	                (morse.isInterpreting ? "" : " (but it was ignored since we are not interpreting)"));
     });
+    
+    morse.on('end-of-signal', function() {
+		console.log(colors.red("Received end of transmission signal: We are now not interpreting"));
+    });
 
     db.ref("morse/isInterpreting").on('value', function(snapshot) {
 	    var nowIsInterpreting = !(snapshot.val() === false);

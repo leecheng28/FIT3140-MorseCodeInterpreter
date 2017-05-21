@@ -139,7 +139,6 @@ module.exports = (function(){
                 me.emit('signal', isLong, startTime);
 
             	if (!me.isInterpreting) {
-            		console.log('bad');
             		return;
             	}
 
@@ -173,6 +172,7 @@ module.exports = (function(){
                 if (interpret(me.currentLetter) == '') {
                 	me.isInterpreting = false;
                 	me.currentLetter = "";
+                    me.emit('end-of-signal');
                 }
 
                 // Notify listeners that the message has changed.
