@@ -7,6 +7,8 @@ Our morse code interpreter app is initialized by a server and controlled by a we
 
 For more information about morse code, please refer to [here](https://en.wikipedia.org/wiki/Morse_code).
 
+For more details about this project, please read the [Assignment 5 specification](https://github.com/FIT3140-S1-2017/assignment-5-team29/raw/master/Docs/FIT3140Assignment5%20MorseCodeDecoder.pdf) and [iteration 2 goals](https://github.com/FIT3140-S1-2017/assignment-5-team29/blob/master/Docs/Assignment5%20Iteration2.pdf)
+
 # Iteration 1 #
 ## Iteration Description ##
 This is the first iteration of assignment 5, we have a list of user stories to implement. Among these, we need to unit test two user stories. They are, 
@@ -17,8 +19,6 @@ Each user story test is made up of simple test cases (normal program behavior), 
 The Mocha testing framework is used to implement the test cases.
 
 For more information about tests, please see the test plan [here](https://github.com/FIT3140-S1-2017/assignment-5-team29/raw/master/Docs/TestPlans.pdf).
-
-For more details about morse code, please read the [Assignment 5 specification](https://github.com/FIT3140-S1-2017/assignment-5-team29/raw/master/Docs/FIT3140Assignment5%20MorseCodeDecoder.pdf).
 
 ## Run the program ##
 Clone the repository.
