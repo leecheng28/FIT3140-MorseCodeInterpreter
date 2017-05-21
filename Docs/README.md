@@ -3,7 +3,7 @@
 ## Project Description ##
 In this project, we will implement "version 0.1" of the Morse Code Interpreter app, using Firebase and Johnny-five library. Morse code interpreter is a method of transmitting text information as a series of on-off tones, lights, or clicks that can be directly understood by a skilled listener or observer. (Wikipedia) 
 
-Our morse code interpreter app is initialized by a server and controlled by a web control panel "Morse code decoder". On the **server** side, a server user can send messages by making a series of long and short signals. The signals are triggered by pressing "Enter/Return" keyboard key. And the signal's type is determined by server-side user's timing. On the **web** control panel, a user can start/end the decoding process by switching on/off a toggle button. Once the decoding process is on(i.e. the toggle button is switched on), a user can receive encoded and decoded messages from server side. 
+Our morse code interpreter app is initialized by a server and controlled by a web control panel "Morse code decoder". On the **server** side, a server user can send messages by making a series of long and short signals. The signals are triggered by pressing "Enter/Return" keyboard key. And the signal's type is determined by server-side user's timing. On the **web** control panel, a client user can start/end the decoding process by switching on/off a toggle button. Once the decoding process is on(i.e. the toggle button is switched on), a client user can receive encoded and decoded messages from server side. 
 
 For more information about morse code, please refer to [here](https://en.wikipedia.org/wiki/Morse_code).
 
