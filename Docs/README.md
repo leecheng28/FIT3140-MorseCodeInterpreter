@@ -53,6 +53,7 @@ This is the second iteration of assignment 5, we have a priortized list of goals
 git clone https://github.com/FIT3140-S1-2017/assignment-5-team29
 cd assignment-5-team29/Program
 npm install
+npm install -g webpack-dev-server
 webpack-dev-server
 ```
 
