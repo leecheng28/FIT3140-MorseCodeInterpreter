@@ -77,8 +77,7 @@ Note. If you have problems configuring your physical arduino device, please refe
 
 # Who do I talk to? #
 Further issues, please contact
-* Matthew at `mgrea2@student.monash.edu`
-* Li at `lche206@student.monash.edu`
+* Li at `cl745524836ATgmail.com`
 
 
 
